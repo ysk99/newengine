@@ -46,13 +46,13 @@ class updatedownloads extends Command
         $this->info('下载网站-更新电影天堂');
         // dump($download->clewer_dytt());
         $this->info('下载网站-更新BT之家');
-        dump($download->clewer_btzhijia());
+      //  dump($download->clewer_btzhijia());
         $this->info('下载网站-66V');
-        // dump($download->clewer_s66());
-        $this->info('下载网站-讯影网');
-        // dump($download->clewer_xunying());
+        dump($download->clewer_s66());
+        $this->info('下载网站-讯影网');//0
+        // dump($download->clewer_xunying());//0
         $this->info('下载网站-BTBT电影网 ');
-        // dump($download->clewer_btbtdy());
+        // dump($download->clewer_btbtdy());//0
         $this->info('下载网站-迅雷720');
         // dump($download->clewer_xl720());
         $this->info('下载网站-优质电影网');

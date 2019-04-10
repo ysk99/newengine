@@ -44,7 +44,7 @@ class Updateonlines extends Command
         $go = new GetController();
         // $download = new GetdownloaddatasController();
         $this->info('在线网站-天天云影院');
-        dump($go->clewer_ttyyy());
+        //dump($go->clewer_ttyyy());//0
         $this->info('在线网站-逗别看');
         dump($go->clewer_doubiekan());
         $this->info('在线网站-在线之家');
@@ -59,7 +59,10 @@ class Updateonlines extends Command
         dump($go->clewer_yunbtv());
         $this->info('下载网站-BTtwo影院');
         dump($go->clewer_bttwo());
-
+        $this->info('下载网站-gimy影院');
+        dump($go->clewer_gimy());
+		$this->info('下载网站-海兔影院');
+        dump($go->clewer_haitu());
 
         $this->info('更新任务完成');
     }

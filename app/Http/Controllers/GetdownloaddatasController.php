@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// use App\Moviedatas;
+use App\Moviedatas;
 use App\Downloaddatas;
 // use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -300,6 +300,7 @@ class GetdownloaddatasController extends Controller
           // $data['href'] = 'http://www.doubiekan.org';
           $data['href'] = $node->filterXPath('//div[@class="thumbnail"]/a/@href')->text();
           $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
+          $data = Moviedatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
           // sleep(1);
           return $data;
           });

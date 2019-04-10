@@ -49,6 +49,11 @@ class moviedatas extends Model
           'type' => 'text', // 字段类型为全⽂文检索,如果需要关键字,则修改为keyword,注意keyword字段为整体查询,不不能作为模糊搜索
           "analyzer" => "ik_max_word",
           "search_analyzer" => "ik_smart",
+          // 'fields' => [
+          //           'raw' => [
+          //               'type' => 'keyword',
+          //           ]
+          //       ],
        ]
   ]
   ];
