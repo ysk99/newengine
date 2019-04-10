@@ -55,14 +55,17 @@ class Updateonlines extends Command
         // dump($go->clewer_ys88());
         // $this->info('在线网站-田鸡影院网站');
         // dump($go->clewer_mtotoo());
-        // $this->info('下载网站-云播影院');
+        // $this->info('在线网站-云播影院');
         // dump($go->clewer_yunbtv());
-        // $this->info('下载网站-BTtwo影院');
+        // $this->info('在线网站-BTtwo影院');
         // dump($go->clewer_bttwo());
-        $this->info('下载网站-gimy影院');
-        dump($go->clewer_gimy());
-		// $this->info('下载网站-海兔影院');
+        // $this->info('在线网站-gimy影院');
+        // dump($go->clewer_gimy());
+		// $this->info('在线网站-海兔影院');
         // dump($go->clewer_haitu());
+        $this->info('在线网站-看看屋');
+        dump($go->clewer_kankanwu());
+        
         $this->info('更新任务完成');
     }
 }

@@ -795,9 +795,12 @@ class GetController extends Controller
    }
    public function clewer_haitu_get_total_page($leixing)
    {
+    $handlerStack = HandlerStack::create(new CurlHandler());
+    $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
      $client = new Client(['base_uri' => 'http://fkdy.me/index.php?m=vod-search',
-                          'timeout'  => 0,
-                          'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"]
+                          'timeout'  => 3.14,
+                          'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"],
+                          'handler' => $handlerStack
                         ]);
      $vod_search = 'vod-search';
      $response = $client->request('get', 'http://www.haitum.com/'.$leixing.'/page/2');
@@ -807,6 +810,96 @@ class GetController extends Controller
      $total_page = $crawler->filterXPath('//*[@class="page-num count-right"]/div[2]/a[last()]/@href')->text();
      // return $total_page;
      $total_page=str_replace('/'.$leixing.'/page/','',$total_page);
+     return intval($total_page);
+     // return $contents;
+   }
+
+   //看看屋
+   public function clewer_kankanwu()
+   {
+     $handlerStack = HandlerStack::create(new CurlHandler());
+     $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
+     for($i=1;$i<=5;$i++){
+       switch ($i)
+         {
+          case 1:
+            $leixing = "dy";
+            break;
+          case 2:
+            $leixing = "dsj";
+            break;
+          case 3:
+            $leixing = "Animation";
+            break;
+          case 4:
+            $leixing = "Arts";
+            break;
+          case 5:
+            $leixing = "microfilm";
+            break;
+         default:
+           $leixing = 1;
+         }
+         // 获取每个类型下的页面总数
+       $total_page = $this->clewer_kankanwu_get_total_page($leixing);
+      //  return $total_page;
+       for($k=1;$k<=$total_page;$k++){
+           $client = new Client([
+                // Base URI is used with relative requests
+                'base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                // You can set any number of default request options.
+                'timeout'  =>  3.14 ,
+                'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36","Cookie"=>"Hm_lvt_d91bd9f22a0064c73796c0de6831474b=1554773228; PHPSESSID=bq22hd8ttkmf3jpfu5u0bhart1; Hm_lpvt_d91bd9f22a0064c73796c0de6831474b=1554778277","Accept"=>"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"],
+                'handler' => $handlerStack
+                ]);
+                $response = $client->request('get', 'https://www.kankanwu.com/'.$leixing.'/index_'.$k.'_______1.html');
+                $contents = (string) $response->getBody();
+                $this->kankanwu($contents);
+                // return $contents;
+                // $crawler = new Crawler($contents);
+                // $article = [];
+                // $total_page = $crawler->filterXPath('//*[@class="content"]/ul/li[1]/a/@title')->text();
+                // stripslashes(json_encode($this->doubiekan($contents), 320));
+                dump('看看屋'.$leixing.'已经爬取完第'.$k.'页---');
+                sleep(1);
+
+       }
+     }
+   }
+   public function kankanwu($bttwo)
+   {
+     $crawler = new Crawler();
+     $crawler->addHtmlContent($bttwo);
+     $doubiekans = $crawler->filterXPath('//*[@class="tbmov-box"]/ul/li')->each(function (Crawler $node, $i) {
+     $doubiekan['title'] = $node->filterXPath('//div/h3/a')->text();
+     $doubiekan['website'] = "看看屋";
+     $doubiekan['leixing'] = "online";
+     $doubiekan['recommend'] = 6;
+     $doubiekan['others'] = $node->filterXPath('//div')->text();
+     $doubiekan['href'] = 'https://www.kankanwu.com';
+     $doubiekan['href'] .= $node->filterXPath('//div/h3/a/@href')->text();
+     $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
+     return $doubiekan;
+     });
+     return $doubiekans;
+   }
+   public function clewer_kankanwu_get_total_page($leixing)
+   {
+    $handlerStack = HandlerStack::create(new CurlHandler());
+    $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
+     $client = new Client(['base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                          'timeout'  => 0,
+                          'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"],
+                          'handler' => $handlerStack
+                        ]);
+     $vod_search = 'vod-search';
+     $response = $client->request('get', 'https://www.kankanwu.com/'.$leixing.'/index_1_______1.html');
+     $contents = (string) $response->getBody();
+     $crawler = new Crawler($contents);
+     // $article = [];
+     $total_page = $crawler->filterXPath('//*[@class="ui-bar list-page fn-clear"]/div/a[last()]/@data')->text();
+     // return $total_page;
+     $total_page=str_replace('p-','',$total_page);
      return intval($total_page);
      // return $contents;
    }

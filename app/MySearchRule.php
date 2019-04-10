@@ -28,7 +28,7 @@ class MySearchRule extends SearchRule
     {
         //
         return [
-        'must' => [
+        'should' => [
             'match_phrase' => [
             // 'title' => $this->builder->query,
             'title' => $this->builder->query
