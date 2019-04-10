@@ -64,6 +64,9 @@ class Updateonlines extends Command
 		$this->info('下载网站-海兔影院');
         dump($go->clewer_haitu());
 
+        
+        dump($go->clewer_haitu());
+        
         $this->info('更新任务完成');
     }
 }
