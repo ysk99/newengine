@@ -633,6 +633,184 @@ class GetController extends Controller
      // return json_encode($doubiekans, 320);
    }
 
+   public function clewer_gimy_get_total_page($leixing)
+   {
+     $handlerStack = HandlerStack::create(new CurlHandler());
+     $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
+     $client = new Client(['base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                          'timeout'  => 2.0,
+                          'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"],
+                          'handler' => $handlerStack
+                        ]);
+     $response = $client->request('get', 'https://v.gimy.tv/list/'.$leixing.'-----hits_week-1.html');
+     $contents = (string) $response->getBody();
+     $crawler = new Crawler($contents);
+     // $article = [];
+     $total_page = $crawler->filterXPath('//*[@class="box-page clearfix ajax-page"]/ul/li[last()]/a/@data')->text();
+     // return $total_page;
+     $total_page=str_replace('p-','',$total_page);
+     return intval($total_page);
+   }
+   public function clewer_gimy()
+   {
+     $handlerStack = HandlerStack::create(new CurlHandler());
+     $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
+     for($i=1;$i<=4;$i++){
+       switch ($i)
+         {
+         case 1:
+           $leixing = "movies";
+           break;
+         case 2:
+           $leixing = "drama";
+           break;
+           case 3:
+           $leixing = "anime";
+           break;
+           case 4:
+           $leixing = "tvshow";
+           break;
+         default:
+           $leixing = 1;
+         }
+         // 获取每个类型下的页面总数
+       $total_page = $this->clewer_gimy_get_total_page($leixing);
+      //  return $total_page;
+       for($k=1;$k<=$total_page;$k++){
+           $client = new Client([
+                // Base URI is used with relative requests
+                'base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                // You can set any number of default request options.
+                'timeout'  =>  2 ,
+                'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"],
+                'handler' => $handlerStack
+                ]);
+                $response = $client->request('get', 'https://v.gimy.tv/list/'.$leixing.'-----hits_week-'.$k.'.html');
+                $contents = (string) $response->getBody();
+                $this->gimy($contents);
+                // return $contents;
+                // $crawler = new Crawler();
+                // $crawler->addHtmlContent($contents);
+                // $datas = $crawler->filterXPath('//*[@class="box-video-list"]/div/ul/li[2]/div[1]/h5/a')->text();
+                // return $datas;
+
+                dump('gimy影院'.$leixing.'已经爬取完第'.$k.'页---');
+                sleep(1);
+
+       }
+     }
+   }
+   public function gimy($gimy)
+   {
+     $crawler = new Crawler();
+     $crawler->addHtmlContent($gimy);
+     $datas = $crawler->filterXPath('//*[@class="box-video-list"]/div/ul/li')->each(function (Crawler $node, $i) {
+     $data['title'] = $node->filterXPath('//div[1]/h5/a')->text();
+     $data['website'] = "gimy影院";
+     $data['leixing'] = "online";
+     $data['recommend'] = 6;
+     $data['others'] = $node->filterXPath('//a[1]')->text();
+     $data['others'] .= $node->filterXPath('//div[2]')->text();
+     // $data['href'] = 'http://www.doubiekan.org';
+     $data['href'] = $node->filterXPath('//div[1]/h5/a/@href')->text();
+     $data = Moviedatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
+     return $data;
+     });
+     return $datas;
+   }
+
+   public function clewer_haitu()
+   {
+     $handlerStack = HandlerStack::create(new CurlHandler());
+     $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
+     for($i=1;$i<=7;$i++){
+       switch ($i)
+         {
+          case 1:
+            $leixing = "dianying";
+            break;
+          case 2:
+            $leixing = "dianshiju";
+            break;
+          case 3:
+            $leixing = "zongyi";
+            break;
+          case 4:
+            $leixing = "dongman";
+            break;
+          case 5:
+            $leixing = "jilupian";
+            break;
+          case 6:
+            $leixing = "weidianying";
+            break;
+          case 7:
+            $leixing = "lunlipian";
+            break;
+         default:
+           $leixing = 1;
+         }
+         // 获取每个类型下的页面总数
+       $total_page = $this->clewer_haitu_get_total_page($leixing);
+       // return $total_page;
+       for($k=1;$k<=$total_page;$k++){
+           $client = new Client([
+                // Base URI is used with relative requests
+                'base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                // You can set any number of default request options.
+                'timeout'  =>  3.14 ,
+                'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36","Cookie"=>"Hm_lvt_d91bd9f22a0064c73796c0de6831474b=1554773228; PHPSESSID=bq22hd8ttkmf3jpfu5u0bhart1; Hm_lpvt_d91bd9f22a0064c73796c0de6831474b=1554778277","Accept"=>"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"],
+                'handler' => $handlerStack
+                ]);
+                $response = $client->request('get', 'http://www.haitum.com/'.$leixing.'/page/'.$k);
+                $contents = (string) $response->getBody();
+                $this->haitu($contents);
+                // return $contents;
+                // $crawler = new Crawler($contents);
+                // $article = [];
+                // $total_page = $crawler->filterXPath('//*[@class="content"]/ul/li[1]/a/@title')->text();
+                // stripslashes(json_encode($this->doubiekan($contents), 320));
+                dump('海兔影院'.$leixing.'已经爬取完第'.$k.'页---');
+                sleep(1);
+
+       }
+     }
+   }
+   public function haitu($bttwo)
+   {
+     $crawler = new Crawler();
+     $crawler->addHtmlContent($bttwo);
+     $doubiekans = $crawler->filterXPath('//*[@class="new-hot-movie"]/div[2]/ul/li')->each(function (Crawler $node, $i) {
+     $doubiekan['title'] = $node->filterXPath('//a/@title')->text();
+     $doubiekan['website'] = "海兔影院";
+     $doubiekan['leixing'] = "online";
+     $doubiekan['recommend'] = 6;
+     $doubiekan['others'] = $node->filterXPath('//a')->text();
+     $doubiekan['href'] = 'http://www.haitum.com';
+     $doubiekan['href'] .= $node->filterXPath('//a/@href')->text();
+     $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
+     return $doubiekan;
+     });
+     return $doubiekans;
+   }
+   public function clewer_haitu_get_total_page($leixing)
+   {
+     $client = new Client(['base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                          'timeout'  => 0,
+                          'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"]
+                        ]);
+     $vod_search = 'vod-search';
+     $response = $client->request('get', 'http://www.haitum.com/'.$leixing.'/page/2');
+     $contents = (string) $response->getBody();
+     $crawler = new Crawler($contents);
+     // $article = [];
+     $total_page = $crawler->filterXPath('//*[@class="page-num count-right"]/div[2]/a[last()]/@href')->text();
+     // return $total_page;
+     $total_page=str_replace('/'.$leixing.'/page/','',$total_page);
+     return intval($total_page);
+     // return $contents;
+   }
+
     public function retryDecider()
    {
        return function (
