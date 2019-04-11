@@ -918,9 +918,13 @@ class GetController extends Controller
              break;
            case 2:
              $leixing = $i;
-             $total_page = 35;
+             $total_page = 23;
              break;
            case 3:
+             $leixing = $i;
+             $total_page = 13;
+             break;
+             case 4:
              $leixing = $i;
              $total_page = 5;
              break;
