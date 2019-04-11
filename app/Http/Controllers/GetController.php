@@ -904,6 +904,73 @@ class GetController extends Controller
      // return $contents;
    }
 
+    //4kdy
+    public function clewer_4kdy()
+    {
+      $handlerStack = HandlerStack::create(new CurlHandler());
+      $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
+      for($i=1;$i<=1;$i++){
+        switch ($i)
+          {
+           case 1:
+             $leixing = $i;
+             $total_page = 40;
+             break;
+           case 2:
+             $leixing = $i;
+             $total_page = 35;
+             break;
+           case 3:
+             $leixing = $i;
+             $total_page = 5;
+             break;
+          default:
+            $leixing = 1;
+          }
+          // 获取每个类型下的页面总数
+        // $total_page = $this->clewer_4kdy_get_total_page($leixing);
+        // return $total_page;
+        for($k=1;$k<=$total_page;$k++){
+            $client = new Client([
+                 // Base URI is used with relative requests
+                 'base_uri' => 'http://fkdy.me/index.php?m=vod-search',
+                 // You can set any number of default request options.
+                 'timeout'  =>  3.14 ,
+                 'headers' => ["User-Agent"=> "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36","Cookie"=>"Hm_lvt_d91bd9f22a0064c73796c0de6831474b=1554773228; PHPSESSID=bq22hd8ttkmf3jpfu5u0bhart1; Hm_lpvt_d91bd9f22a0064c73796c0de6831474b=1554778277","Accept"=>"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"],
+                 'handler' => $handlerStack
+                 ]);
+                 $response = $client->request('get', 'https://www.4kdy.net/4kdylist/'.$leixing.'_'.$k.'.html');
+                 $contents = (string) $response->getBody();
+                 $this->dy4k($contents);
+                 // return $contents;
+                 // $crawler = new Crawler($contents);
+                 // $article = [];
+                 // $total_page = $crawler->filterXPath('//*[@class="content"]/ul/li[1]/a/@title')->text();
+                 // stripslashes(json_encode($this->doubiekan($contents), 320));
+                 dump('4K电影-类型'.$leixing.'已经爬取完第'.$k.'页---');
+                 sleep(1);
+ 
+        }
+      }
+    }
+    public function dy4k($bttwo)
+    {
+      $crawler = new Crawler();
+      $crawler->addHtmlContent($bttwo);
+      $doubiekans = $crawler->filterXPath('//*[@class="stui-pannel_bd"]/ul/li')->each(function (Crawler $node, $i) {
+      $doubiekan['title'] = $node->filterXPath('//div/div/h4/a')->text();
+      $doubiekan['website'] = "4K电影";
+      $doubiekan['leixing'] = "online";
+      $doubiekan['recommend'] = 6;
+      $doubiekan['others'] = $node->filterXPath('//div/div/p')->text();
+      $doubiekan['href'] = 'https://www.4kdy.net';
+      $doubiekan['href'] .= $node->filterXPath('//div/div/h4/a/@href')->text();
+      $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
+      return $doubiekan;
+      });
+      return $doubiekans;
+    }
+
     public function retryDecider()
    {
        return function (
