@@ -12,12 +12,13 @@ class JiexiapisController extends Controller
     public function jiexiapi_add(Request $request)
     {
       // $jiexi = New Jiexiapis;
-      $jiexi['url'] = $request->input('url');
-      $jiexi['others'] = $request->input('others');
-      $jiexi['website']  = $request->input('website');
-      $jiexi['recommend'] = $request->input('recommend');
+      // $jiexi['url'] = $request->input('url');
+      // $jiexi['others'] = $request->input('others');
+      // $jiexi['website']  = $request->input('website');
+      // $jiexi['recommend'] = $request->input('recommend');
       // $jiexi->save();
       // return $jiexi;
+      $jiexi = $request->input('formdata');
       $jiexi= Jiexiapis::updateOrCreate(['website'=>$jiexi['website']],['url'=>$jiexi['url'],'others'=>$jiexi['others'],'recommend'=>$jiexi['recommend']]);
       return $jiexi;
     }
@@ -43,10 +44,11 @@ class JiexiapisController extends Controller
 
     public function hotsearchs_add(Request $request)
     {
-      // $hot = New Hotsearchs;
-      $hot['uid'] = $request->input('uid');
-      $hot['name'] = $request->input('name');
-      // $hot->save();
+      $hot = $request->input('formdata');
+        // $hot = new Hotsearchs;
+        // $hot->uid = $formdata['uid'];
+        // $hot->name = $formdata['name'];
+        // $hot->save();
       $hot= Hotsearchs::updateOrCreate(['uid'=>$hot['uid']],['name'=>$hot['name']]);
       return $hot;
     }

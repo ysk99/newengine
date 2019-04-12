@@ -71,3 +71,27 @@ Route::any('maoyanapi', 'QueryController@maoyanapi');
 // Route::get('/', function () {
 //     return view('search');
 // });
+
+//后端路由区域
+Route::post('login', 'Auth\LoginController@login');
+Route::post('register', 'Auth\RegisterController@register');
+
+Route::group(['middleware' => 'auth:api'], function() {
+    // Route::get('articles', 'ArticleController@index');
+    Route::post('articles/getListPagination', 'ArticleController@getListPagination');
+    Route::get('articles/{id}', 'ArticleController@show');
+    Route::post('articles/store', 'ArticleController@store');
+    Route::post('articles/update', 'ArticleController@update');
+    // Route::put('articles/{id}', 'ArticleController@update');
+    Route::delete('articles/{id}', 'ArticleController@delete');
+    Route::post('logout', 'Auth\LoginController@logout');
+    // 电影网站新增 后端
+    Route::post('newmsg/store', 'MovieController@store');
+    Route::post('newmsg/update', 'MovieController@update');
+    Route::delete('newmsg/delete/{id}', 'MovieController@delete');
+    //前端照片上传 后端
+    Route::post('files/upload', 'UploadController@upfile');
+  
+    // EO相关路由 后端
+    Route::get('eo', 'EotimeController@index');
+  });
