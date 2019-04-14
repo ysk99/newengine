@@ -88,7 +88,7 @@ class GetController extends Controller
              $this->zxzj($contents);
 
              // return $contents;
-             dump('在线之家 ----第'.$i.'页');
+             return('在线之家 ----第'.$i.'页');
              // printf(stripslashes(json_encode($this->mtotoo_save($contents), 320)));
              sleep(1);
       }

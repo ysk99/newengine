@@ -42,12 +42,10 @@ Route::post('baidu_suggest', 'BaiduController@baidu_suggest');
 
 //视频解析前端url获取
 Route::any('jiexiapi_query', 'JiexiapisController@jiexiapi_query');
-Route::any('jiexiapi_add', 'JiexiapisController@jiexiapi_add');
-Route::any('jiexiapi_delete', 'JiexiapisController@jiexiapi_delete');
+
 //热搜查询
 Route::any('hotsearchs_query', 'JiexiapisController@hotsearchs_query');
-Route::any('hotsearchs_add', 'JiexiapisController@hotsearchs_add');
-Route::any('hotsearchs_delete', 'JiexiapisController@hotsearchs_delete');
+
 
 
 // 前端用户访问
@@ -77,6 +75,17 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('register', 'Auth\RegisterController@register');
 
 Route::group(['middleware' => 'auth:api'], function() {
+    //视频解析前端url获取
+    Route::any('jiexiapi_add', 'JiexiapisController@jiexiapi_add');
+    Route::any('jiexiapi_delete', 'JiexiapisController@jiexiapi_delete');
+    //热搜查询
+    Route::any('hotsearchs_add', 'JiexiapisController@hotsearchs_add');
+    Route::any('hotsearchs_delete', 'JiexiapisController@hotsearchs_delete');
+    //爬虫相关
+    Route::any('clewers_add', 'ClewersController@clewers_add');
+    Route::any('clewers_query', 'ClewersController@index');
+ 
+
     // Route::get('articles', 'ArticleController@index');
     Route::post('articles/getListPagination', 'ArticleController@getListPagination');
     Route::get('articles/{id}', 'ArticleController@show');
