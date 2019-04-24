@@ -47,6 +47,7 @@ class GetdownloaddatasController extends Controller
           $data['leixing'] = "download";
           $data['recommend'] = 5;
           $data['others'] = $node->filterXPath('//div[@class="info"]')->text();
+          $data['others']=str_replace(' ','',$data['others']);
           // $data['date'] = $node->filterXPath('//strong')->text();
           // $data['href'] = 'http://www.ttyyy.vip';
           $data['href'] = $node->filterXPath('//div[@class="thumbnail"]/a/@href')->text();
@@ -97,6 +98,7 @@ class GetdownloaddatasController extends Controller
           $data['leixing'] = "download";
           $data['recommend'] = 5;
           $data['others'] = $node->filterXPath('//tr[2]/td[2]/b/a')->text();
+          $data['others']=str_replace(' ','',$data['others']);
           $data['href'] = 'http://www.dy2018.com';
           $data['href'] .= $node->filterXPath('//tr[2]/td[2]/b/a/@href')->text();
           $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
@@ -297,6 +299,7 @@ class GetdownloaddatasController extends Controller
           $data['leixing'] = "download";
           $data['recommend'] = 5;
           $data['others'] = $node->filterXPath('//div[@class="article"]/div[@class="entry_post"]')->text();
+          $data['others']=str_replace(' ','',$data['others']);
           // $data['href'] = 'http://www.doubiekan.org';
           $data['href'] = $node->filterXPath('//div[@class="thumbnail"]/a/@href')->text();
           $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
@@ -339,6 +342,7 @@ class GetdownloaddatasController extends Controller
           $data['leixing'] = "download";
           $data['recommend'] = 5;
           $data['others'] = $node->filterXPath('//div/div')->text();
+          $data['others']=str_replace(' ','',$data['others']);
           // $data['date'] = $node->filterXPath('//strong')->text();
           // $data['href'] = 'http://www.ttyyy.vip';
           $data['href'] = $node->filterXPath('//div/a/@href')->text();
@@ -446,6 +450,7 @@ class GetdownloaddatasController extends Controller
           $data['leixing'] = "download";
           $data['recommend'] = 5;
           $data['others'] = $node->filterXPath('//tr/td[1]/a[5]')->text();
+          $data['others']=str_replace(' ','',$data['others']);
           // $data['href'] = 'http://www.doubiekan.org';
           $data['href'] = $node->filterXPath('//tr/td[1]/a[5]/@href')->text();
           $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
@@ -527,6 +532,7 @@ class GetdownloaddatasController extends Controller
           $data['leixing'] = "download";
           $data['recommend'] = 5;
           $data['others'] = $node->filterXPath('//div[2]/p[2]')->text();
+          $data['others']=str_replace(' ','',$data['others']);
           $data['href'] = 'http://www.btbtdy.tv';
           $data['href'] .= $node->filterXPath('//div[2]/p[1]/a/@href')->text();
           $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
@@ -658,6 +664,7 @@ class GetdownloaddatasController extends Controller
          $data['leixing'] = "download";
          $data['recommend'] = 5;
          $data['others'] = $node->filterXPath('//div[@class="entry-meta"]')->text();
+         $data['others']=str_replace(' ','',$data['others']);
          // $data['href'] = 'http://www.doubiekan.org';
          $data['href'] = $node->filterXPath('//h3/a/@href')->text();
          $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
@@ -740,6 +747,7 @@ class GetdownloaddatasController extends Controller
          $data['leixing'] = "download";
          $data['recommend'] = 5;
          $data['others'] = $node->filterXPath('//p')->text();
+         $data['others']=str_replace(' ','',$data['others']);
          $data['href'] = 'http://www.youzhidy.com';
          $data['href'] .= $node->filterXPath('//header/h2/a/@href')->text();
          $data = Downloaddatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);

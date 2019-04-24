@@ -55,6 +55,7 @@ class GetController extends Controller
       $data['title'] = $node->filterXPath('//a[1]/@title')->text();
       $data['website'] = "15首发在线影院";
       $data['others'] = $node->filterXPath('//a/span[2]')->text();
+      $data['others']=str_replace(' ','',$data['others']);
       $data['leixing'] = 'online';
       $data['recommend'] = 5;
       $data['href'] = 'http://www.15yc.cc/index.php';
@@ -103,6 +104,8 @@ class GetController extends Controller
       $zxzj['website'] = "在线之家影院";
       // $data['website'] = "田鸡影院";
       $zxzj['others'] = $node->filterXPath('//div[1]/a')->text();
+      $zxzj['others']=str_replace(' ','',$zxzj['others']);
+
       // $data['leixing'] = 'online';
       $zxzj['leixing'] = 'online';
       $zxzj['recommend'] = 5;
@@ -149,6 +152,7 @@ class GetController extends Controller
       $mtotoo['website'] = "田鸡影院";
       // $mtotoo['website'] = "田鸡影院";/div[2]
       $mtotoo['others'] = $node->filterXPath('//div[2]')->text();
+      $mtotoo['others']=str_replace(' ','',$mtotoo['others']);
       // $mtotoo['leixing'] = 'online';
       $mtotoo['leixing'] = 'online';
       $mtotoo['recommend'] = 5;
@@ -239,6 +243,8 @@ class GetController extends Controller
       $ttyyy['leixing'] = "online";
       $ttyyy['recommend'] = 5;
       $ttyyy['others'] = $node->filterXPath('//a/div[@class="text"]')->text();
+      $ttyyy['others']=str_replace(' ','',$ttyyy['others']);
+
       // $ttyyy['date'] = $node->filterXPath('//strong')->text();
       $ttyyy['href'] = 'http://www.ttyyy.vip';
       $ttyyy['href'] .= $node->filterXPath('//a/@href')->text();
@@ -367,6 +373,7 @@ class GetController extends Controller
       $doubiekan['leixing'] = "online";
       $doubiekan['recommend'] = 5;
       $doubiekan['others'] = $node->filterXPath('//*')->text();
+      $doubiekan['others']=str_replace(' ','',$doubiekan['others']);
       $doubiekan['href'] = 'http://www.doubiekan.org';
       $doubiekan['href'] .= $node->filterXPath('//div[@class="title"]/h5/a/@href')->text();
       $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
@@ -618,6 +625,7 @@ class GetController extends Controller
      $doubiekan['recommend'] = 5;
      $doubiekan['a'] = $node->filterXPath('//div[@class="hdinfo"]')->text();
      $doubiekan['others'] = $node->filterXPath('//p')->text();
+     
      // $doubiekan['href'] = 'http://www.doubiekan.org';
      $doubiekan['href'] = $node->filterXPath('//h3/a/@href')->text();
      if(strpos($doubiekan['a'],'在线观看')){
@@ -711,6 +719,7 @@ class GetController extends Controller
      $data['recommend'] = 6;
      $data['others'] = $node->filterXPath('//a[1]')->text();
      $data['others'] .= $node->filterXPath('//div[2]')->text();
+     $data['others']=str_replace(' ','',$data['others']);
      // $data['href'] = 'http://www.doubiekan.org';
      $data['href'] = $node->filterXPath('//div[1]/h5/a/@href')->text();
      $data = Moviedatas::updateOrCreate(['title'=>$data['title'],'website'=>$data['website']],['href'=>$data['href'],'others'=>$data['others'],'leixing'=>$data['leixing'],'recommend'=>$data['recommend']]);
@@ -786,6 +795,7 @@ class GetController extends Controller
      $doubiekan['leixing'] = "online";
      $doubiekan['recommend'] = 6;
      $doubiekan['others'] = $node->filterXPath('//a')->text();
+     $doubiekan['others']=str_replace(' ','',$doubiekan['others']);
      $doubiekan['href'] = 'http://www.haitum.com';
      $doubiekan['href'] .= $node->filterXPath('//a/@href')->text();
      $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
@@ -876,6 +886,7 @@ class GetController extends Controller
      $doubiekan['leixing'] = "online";
      $doubiekan['recommend'] = 6;
      $doubiekan['others'] = $node->filterXPath('//div')->text();
+     $doubiekan['others']=str_replace(' ','',$doubiekan['others']);
      $doubiekan['href'] = 'https://www.kankanwu.com';
      $doubiekan['href'] .= $node->filterXPath('//div/h3/a/@href')->text();
      $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
@@ -967,6 +978,7 @@ class GetController extends Controller
       $doubiekan['leixing'] = "online";
       $doubiekan['recommend'] = 6;
       $doubiekan['others'] = $node->filterXPath('//div/div/p')->text();
+      $doubiekan['others']=str_replace(' ','',$doubiekan['others']);
       $doubiekan['href'] = 'https://www.4kdy.net';
       $doubiekan['href'] .= $node->filterXPath('//div/div/h4/a/@href')->text();
       $doubiekan = Moviedatas::updateOrCreate(['title'=>$doubiekan['title'],'website'=>$doubiekan['website']],['href'=>$doubiekan['href'],'others'=>$doubiekan['others'],'leixing'=>$doubiekan['leixing'],'recommend'=>$doubiekan['recommend']]);
